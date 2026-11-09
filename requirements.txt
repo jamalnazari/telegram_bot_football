@@ -1,0 +1,6 @@
+requests>=2.31
+Pillow>=10.0
+arabic-reshaper>=2.1
+python-bidi>=0.4
+jdatetime>=5.1
+PyYAML>=6.0

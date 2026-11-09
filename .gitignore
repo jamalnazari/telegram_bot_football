@@ -1,0 +1,11 @@
+# محتوای تولیدی و فایل‌های الشخصية کاربری
+.env
+.cache/
+media/
+__pycache__/
+*.pyc
+.venv/
+
+# نمونه‌ها طريقه regenerat می‌شوند (به‌جز پیش‌نمایش که کامیت می‌شود)
+samples/*
+!samples/preview.html
