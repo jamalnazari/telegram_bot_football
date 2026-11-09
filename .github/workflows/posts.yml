@@ -1,0 +1,73 @@
+name: انتشار خودکار پست‌های فوتبالی
+
+on:
+  schedule:
+    # هنگ‌های UTC: هر ساعت، ۵ دقیقه بعد از ساعت
+    - cron: "5 * * * *"
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "کار مورد نظر را انتخاب کنید"
+        required: false
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - daily
+          - recap
+          - stat
+          - reminder
+          - all
+          - demo
+          - test
+
+permissions:
+  contents: write
+
+concurrency:
+  group: posts
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run job
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          THESPORTSDB_KEY: ${{ secrets.THESPORTSDB_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python run.py --job ${{ github.event.inputs.job || 'auto' }}
+
+      - name: Commit state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/
+          if git diff --cached --quiet; then
+            echo "هیچ تغییری در state/ نیست."
+          else
+            git commit -m "chore: به‌روزرسانی حافظه‌ی ضدتکرار (state)"
+            git push
+          fi

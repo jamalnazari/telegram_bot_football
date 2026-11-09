@@ -1,0 +1,15 @@
+channel:
+  username: "my_football_channel"
+  brand: "برندِ کانال"
+  source_link: ""
+timezone: "Asia/Tehran"
+competitions:
+  - {code: PL,  fa: "لیگ برتر انگلیس"}
+  - {code: PD,  fa: "لالیگا"}
+  - {code: SA,  fa: "سری آ"}
+  - {code: BL1, fa: "بوندس‌لیگا"}
+  - {code: CL,  fa: "لیگ قهرمانان اروپا"}
+iran_league: {enabled: true, league_id: 4742, fa: "لیگ برتر خلیج فارس", season: "2026-2027"}
+posts: {daily_digest_hour: 9, stat_card_hour: 14, recap_hour: 10, reminder_hours_before: 12}
+theme: {bg_top: "#0B1B2B", bg_bottom: "#111C26", accent: "#00E08A", accent2: "#FFC247", text: "#FFFFFF", muted: "#93A4B5"}
+model: {enabled: true, provider: "gemini", name: "gemini-2.5-flash", max_output_tokens: 400}
